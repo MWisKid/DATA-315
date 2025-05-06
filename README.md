@@ -1,5 +1,5 @@
 This project is a Streamlit-based dashboard that allows users to explore and analyze the performance of basketball players over time. 
-The dashboard displays various player stats, including points, rebounds, assists, steals, blocks, and shooting percentages, for both the Regular Season and Playoffs.
+The dashboard displays various player stats, including points, rebounds, assists, steals, blocks, and shooting percentages, for both the Regular Season and Playoffs. Various people, like analysts, common fans, and even players, might take an interest in this page because it shows them different statistics. 
 
 
 The different features I have implemented are: 
