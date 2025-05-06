@@ -74,7 +74,7 @@ if not df_selected.empty:
 else:
     st.write("No data available for this selection.")
 
-# 4. Player Comparison (Compare multiple players)
+# 3. Player Comparison (Compare multiple players)
 # Dropdown for selecting multiple players to compare (add unique key)
 selected_players = st.multiselect("Select Players to Compare", options=df['PLAYER'].unique(), default=df['PLAYER'].unique()[:2], key="players_comparison_multiselect")
 
@@ -94,3 +94,53 @@ ax.set_title(f"Comparison of {selected_stat} Over Time")
 ax.legend(title='Player')
 ax.grid(True)
 st.pyplot(fig)
+
+# 4. Histogram of Stat Distribution
+st.subheader("Stat Distribution Histogram")
+
+# Dropdown for selecting the stat to visualize in histogram
+stat_histogram = st.selectbox("Select Stat for Histogram", stat_options, key="stat_histogram_selectbox")
+
+# Dropdown for season type selection
+season_type_histogram = st.selectbox("Select Season Type for Histogram", ['Regular%20Season', 'Playoffs'], key="season_type_histogram_selectbox")
+
+# Filter data based on selected season type
+df_histogram = df[df['Season_type'] == season_type_histogram]
+
+# Check if data is available for the selected season type
+if df_histogram.empty:
+    st.write(f"No data available for {season_type_histogram} season type.")
+else:
+    # Ensure the selected stat is numeric (convert to numeric and replace non-numeric with NaN, then fill NaN with 0)
+    df_histogram[stat_histogram] = pd.to_numeric(df_histogram[stat_histogram], errors='coerce')
+    df_histogram[stat_histogram] = df_histogram[stat_histogram].fillna(0)
+
+    # Plot the histogram for the selected stat
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.hist(df_histogram[stat_histogram], bins=20, color='skyblue', edgecolor='black')
+
+    # Add labels and title
+    ax.set_xlabel(stat_histogram)
+    ax.set_ylabel('Frequency')
+    ax.set_title(f'Distribution of {stat_histogram} in {season_type_histogram}')
+
+    # Display the plot in Streamlit
+    st.pyplot(fig)
+
+# 5. Display All Player Stats Over the Years in a Table
+st.subheader("Player Stats Over Time")
+
+# Dropdown to select player
+selected_player_table = st.selectbox("Select Player", player_options, key="player_table_selectbox")
+
+# Filter data for the selected player
+df_player_table = df[df['PLAYER'] == selected_player_table]
+
+# Show stats for the selected player over all years and both seasons
+st.write(f"**Stats for {selected_player_table} Over Time (Including Playoffs and Regular Season)**")
+
+# Display the table
+st.write(df_player_table[['PLAYER', 'Year', 'Season_type', 'FG_PCT', 'FG3_PCT', 'REB', 'AST', 'STL', 'BLK', 'PTS']])
+
+
+
